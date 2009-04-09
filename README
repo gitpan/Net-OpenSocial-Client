@@ -1,0 +1,135 @@
+NAME
+    Net::OpenSocial::Client - OpenSocial REST/RPC Client
+
+SYNOPSIS
+        use Net::OpenSocial::Client;
+        use Net::OpenSocial::Client::Container::OrkutSandbox;
+        use Net::OpenSocial::Client::Type::Protocol qw(REST RPC);
+        use Data::Dump qw(dump);
+
+        my $client = Net::OpenSocial::Client->new(
+            container       => Net::OpenSocial::Client::Container::OrkutSandbox->new, 
+            consumer_key    => q{orkut.com:623061448914},
+            consumer_secret => q{uynAeXiWTisflWX99KU1D2q5},
+            requestor       => q{03067092798963641994},
+            protocol_type   => RPC,
+        );
+
+        my $friends = $client->get_friends('@me')
+            or die $client->errstr;
+        for my $person ( @{ $friends->items } ) {
+            say $person->get_field('id');
+            ...
+
+            say dump($person->fields);
+        }
+
+DESCRIPTION
+    OpenSocial provides API endpoints which called 'RESTful API' and 'RPC'.
+    This module allows you to handle it easily. This provides you a same
+    interface for both REST-API and RPC, so you don't need to mind about the
+    big differences between them.
+
+SIMPLE USAGE
+    If you don't need to handle multiple requests at once for more effective
+    performance (batch request), this module provides you some simple
+    methods that can handle resources easily.
+
+        my $client = Net::OpenSocial::Client->new(...);
+
+        my $user_id = '@me';
+        my $person = $client->get_person( $user_id )
+            or die $client->errstr;
+
+        say $person->get_field('id');
+
+        my $friends = $client->get_friends( $user_id )
+            or die $client->errstr;
+
+        foreach my $friend ( @{ $friends->items } ) {
+            say $friend->get_field('id');
+        }
+
+    For more details, look at each methods' document.
+
+    get_people =item get_person =item get_friends =item get_person_appdata
+    =item get_friends_appdata
+RAW APIs AND BATCH REQUEST
+  BUILD REQUEST
+
+    You can build a request object by yourself or choose from preset. See
+    Net::OpenSocial::Client::Request.
+
+        my $request = Net::OpenSocial::Client::Request->new(
+            service   => PEOPLE,
+            operation => GET,
+            user_id   => '@me',
+            group_id  => '@friends',
+            params    => {
+                itemsPerPage => 10,
+                startIndex   => 10,
+            },
+        );
+
+    or
+
+        my $request = Net::OpenSocial::Client::Request::FetchFriends->new( '@me',
+            { itemsPerPage => 10, startIndex => 10 } );
+
+  EXECUTE REQUEST
+
+    You should add request to client with request-id.
+
+        $client->add_request( req1 => $request1 );
+        $client->add_request( req2 => $request2 );
+
+    Only execute 'add_request', you can't obtain a result corresponding to
+    the requests. To get them, you have to call 'send'.
+
+        my $result_set = $client->send()
+
+    Internally, it works apropriately according to the protocol type you
+    choose. If RPC is selected, multiple requests are send as one single
+    http-request. Or with REST, it send multiple http-request for each
+    opensocial-request. And it returns Net::OpenSocial::Client::ResultSet
+    object.
+
+  PICK UP RESULT
+
+    Pick up Net::OpenSocial::Client::Result object with request-id you
+    passed when invoking 'add_request'.
+
+        my $result1 = $result_set->get_result('req1');
+        my $result2 = $result_set->get_result('req2');
+
+  HANDLE DATA
+
+        if ( $result1->is_error ) {
+            die sprintf q{%d: %s.},
+                $result->code, $result->message;
+        } else {
+            my $data = $result1->data;
+            ...
+        }
+
+    the data may be Net::OpenSocial::Client::Collection or
+    Net::OpenSocial::Client::Resource subclass's object. such like
+    Net::OpenSocial::Client::Resource::Person
+    ,Net::OpenSocial::Client::Resource::Activity
+    ,Net::OpenSocial::Client::Resource::AppData , or
+    Net::OpenSocial::Client::Resource::Group.
+
+METHODS
+  new
+
+        use Net::OpenSocial::Client::Type::Auth qw(OAUTH ST);
+        use Net::OpenSocial::Client::Type::Format qw(JSON XML);
+        use Net::OpenSocial::Client::Type::Protocol qw(REST RPC);
+
+        my $client = Net::OpenSocial::Client->new(
+            container     => $container,
+            auty_type     => OAUTH,
+            format_type   => JSON,
+            protocol_type => REST,
+        );
+

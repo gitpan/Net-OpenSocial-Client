@@ -1,0 +1,33 @@
+---
+abstract: 'OpenSocial REST/RPC Client'
+author:
+  - 'Lyo Kato, <lyo.kato@gmail.com>'
+build_requires:
+  Module::Install::AuthorTests: 0
+  Test::LoadAllModules: 0.02
+  Test::More: 0
+distribution_type: module
+generated_by: 'Module::Install version 0.77'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Net-OpenSocial-Client
+no_index:
+  directory:
+    - inc
+    - t
+requires:
+  Any::Moose: 0.06
+  Data::Dump: 0
+  HTTP::Headers: 0
+  HTTP::Request: 0
+  JSON: 2.14
+  LWP::UserAgent: 0
+  Mouse: 0.19
+  MouseX::AttributeHelpers: 0.03
+  OAuth::Lite: 1.16
+  URI: 0
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.01_01
