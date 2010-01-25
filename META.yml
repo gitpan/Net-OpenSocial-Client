@@ -3,11 +3,14 @@ abstract: 'OpenSocial REST/RPC Client'
 author:
   - 'Lyo Kato, <lyo.kato@gmail.com>'
 build_requires:
+  ExtUtils::MakeMaker: 6.42
   Module::Install::AuthorTests: 0
   Test::LoadAllModules: 0.02
   Test::More: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.77'
+generated_by: 'Module::Install version 0.920'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -17,6 +20,7 @@ no_index:
   directory:
     - inc
     - t
+    - xt
 requires:
   Any::Moose: 0.06
   Data::Dump: 0
@@ -24,10 +28,10 @@ requires:
   HTTP::Request: 0
   JSON: 2.14
   LWP::UserAgent: 0
-  Mouse: 0.19
+  Mouse: 0.21
   MouseX::AttributeHelpers: 0.03
-  OAuth::Lite: 1.16
+  OAuth::Lite: 1.17
   URI: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.01_01
+version: 0.01_02

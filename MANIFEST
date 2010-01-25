@@ -1,4 +1,3 @@
-.DS_Store
 .shipit
 Changes
 inc/Module/Install.pm
@@ -58,11 +57,11 @@ Makefile.PL
 MANIFEST
 META.yml
 README
+xt/online/orkutsandbox_rest_appdata.t
+xt/online/orkutsandbox_rest_people.t
+xt/online/orkutsandbox_rpc_appdata.t
+xt/online/orkutsandbox_rpc_people.t
 t/00_load_all.t
-t/online/orkutsandbox_rest_appdata.t
-t/online/orkutsandbox_rest_people.t
-t/online/orkutsandbox_rpc_appdata.t
-t/online/orkutsandbox_rpc_people.t
 xt/01_pod.t
 xt/02_podcoverage.t
 xt/03_podspell.t
